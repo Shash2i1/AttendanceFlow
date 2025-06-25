@@ -215,18 +215,29 @@ const fetchAttendanceStatus = async (req, res) => {
 
 const getAttendanceCounts = async (req, res) => {
   try {
-    const attendanceRecords = await Attendance.find({}, 'records');
+    const userId = req.user._id;
+
+    // 1. Get all classIds owned by the logged-in user
+    const classes = await ClassModel.find({ owner: userId }, '_id');
+    const classIds = classes.map(cls => cls._id);
+
+    if (classIds.length === 0) {
+      return res.status(200).json({ presentCount: 0, absentCount: 0 });
+    }
+
+    // 2. Fetch only attendance from those classIds
+    const attendanceRecords = await Attendance.find(
+      { classId: { $in: classIds } },
+      'records'
+    );
 
     let presentCount = 0;
     let absentCount = 0;
 
-    attendanceRecords.forEach((attendance) => {
-      attendance.records.forEach((record) => {
-        if (record.status === 'Present') {
-          presentCount++;
-        } else if (record.status === 'Absent') {
-          absentCount++;
-        }
+    attendanceRecords.forEach(attendance => {
+      attendance.records.forEach(record => {
+        if (record.status === 'Present') presentCount++;
+        else if (record.status === 'Absent') absentCount++;
       });
     });
 
@@ -234,11 +245,13 @@ const getAttendanceCounts = async (req, res) => {
       presentCount,
       absentCount,
     });
+
   } catch (error) {
     console.error('getAttendanceCounts error:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 
 
 
