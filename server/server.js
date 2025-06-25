@@ -31,11 +31,12 @@ app.use("/api/v1/main", studentsRoute);
 // Production static files
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "./client/dist")));
-  app.get("*", (req, res) => {
+  
+  // Serve React app for all non-API routes
+  app.get(/^\/(?!api).*/, (req, res) => {
     res.sendFile(path.join(__dirname, "./client", "dist", "index.html"));
   });
 }
-
 // Start server
 app.listen(PORT, () => {
   console.log(` Server is running on port ${PORT}`);

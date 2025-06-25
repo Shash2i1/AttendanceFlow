@@ -119,7 +119,7 @@ function ClassDetails() {
 
                         {/* Right side - Action buttons */}
                         <div className="flex gap-2">
-                            <Link to={`attendance`} title="mark todays attendance" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-all text-sm font-medium shadow-lg hover:shadow-xl">
+                            <Link to={`/dashboard/class-info/${id}/${name}/attendance`} title="mark todays attendance" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-all text-sm font-medium shadow-lg hover:shadow-xl">
                                 Mark Attendance
                             </Link>
                             <button
