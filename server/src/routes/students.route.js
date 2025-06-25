@@ -1,4 +1,4 @@
-import Router from "express";
+import {Router} from "express";
 import validateToken from "../middleware/validateToken.js"
 import { addStudent, createClass, deleteClass, deleteStudent, fetchAttendanceStatus, fetchClasses, fetchStudentsList, getAttendanceCounts, markAttendance } from "../controller/attendance.controller.js";
 
